@@ -9,10 +9,14 @@ Template.task.onCreated(function () {
 });
 
 Template.task.events({
-  "click .toggle-checked"(event) {
-    Template.instance().isUpdateLoading.set(true);
-    Meteor.call("tasks.setIsChecked", this._id, !this.isChecked);
-    Template.instance().isUpdateLoading.set(false);
+  async "click .toggle-checked"(event) {
+    try {
+      Template.instance().isUpdateLoading.set(true);
+      await Meteor.call("tasks.setIsChecked", this._id, !this.isChecked);
+      Template.instance().isUpdateLoading.set(false);
+    } catch (error) {
+      console.log(error);
+    }
   },
   "click .delete"() {
     Meteor.call("tasks.remove", this._id);

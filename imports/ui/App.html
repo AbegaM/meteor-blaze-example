@@ -14,22 +14,23 @@
 
     <div class="main">
       {{#if isUserLogged}}
-      <div class="user">{{getUser.username}} 🚪</div>
-      {{> form }}
-      <div class="filter">
-        <button id="hide-completed-button">
-          {{#if hideCompleted}} Show All {{else}} Hide completed {{/if}}
-        </button>
-      </div>
+        <div class="user">{{getUser.username}} 🚪</div>
+        {{> form }}
+        <div class="filter">
+          <button id="hide-completed-button">
+            {{#if hideCompleted}} Show All {{else}} Hide completed {{/if}}
+          </button>
+        </div>
 
-      {{#if isLoading}}
-      <div class="loading">loading...</div>
+        {{#if isLoading}}
+          <div class="loading">loading...</div>
+        {{/if}}
+
+        <ul class="tasks">
+          {{#each tasks}} {{> task}} {{/each}}
+        </ul>
+      {{else}} {{> login}}
       {{/if}}
-
-      <ul class="tasks">
-        {{#each tasks}} {{> task}} {{/each}}
-      </ul>
-      {{else}} {{> login}} {{/if}}
     </div>
   </div>
 </template>
