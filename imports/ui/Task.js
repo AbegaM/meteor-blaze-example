@@ -16,8 +16,8 @@ Template.task.events({
   async "click .toggle-checked"(event, template) {
     try {
       template.isUpdateLoading.set(true);
+      await sleep(768);
       await Meteor.call("tasks.setIsChecked", this._id, !this.isChecked);
-      await sleep(3000);
       template.isUpdateLoading.set(false);
     } catch (error) {
       console.log(error);
