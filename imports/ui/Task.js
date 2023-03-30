@@ -4,32 +4,37 @@ import { Template } from "meteor/templating";
 
 import "./Task.html";
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 Template.task.onCreated(function () {
   this.isUpdateLoading = new ReactiveVar(false);
 });
 
 Template.task.events({
-  async "click .toggle-checked"(event, template) {
+  "click .toggle-checked"(event, template) {
     try {
+      const { data } = Template.instance();
       template.isUpdateLoading.set(true);
-      await sleep(768);
-      await Meteor.call("tasks.setIsChecked", this._id, !this.isChecked);
-      template.isUpdateLoading.set(false);
+
+      Meteor.setTimeout(async function () {
+        await Meteor.callAsync("tasks.setIsChecked", data._id, !data.isChecked);
+        template.isUpdateLoading.set(false);
+      }, 768);
     } catch (error) {
       console.log(error);
     }
   },
-  "click .delete"() {
-    Meteor.call("tasks.remove", this._id);
+
+  async "click .delete"() {
+    try {
+      await Meteor.callAsync("tasks.remove", this._id);
+    } catch (error) {
+      console.log(error);
+    }
   },
 });
 
 Template.task.helpers({
   isUpdateLoading() {
-    return Template.instance().isUpdateLoading.get();
+    const instance = Template.instance();
+    return instance.isUpdateLoading.get();
   },
 });
